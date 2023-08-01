@@ -18,3 +18,12 @@ export interface InstagramPost {
     shortcode: string;
   };
 }
+
+export interface Essay {
+  _id: mongoose.Types.ObjectId;
+  title: string,
+  description: string;
+  url: string;
+  openCount: number;
+  createdAt: Date;
+}

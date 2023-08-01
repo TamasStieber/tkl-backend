@@ -1,14 +1,9 @@
 import * as config from './config/config';
 import express from 'express';
 import mongoose from 'mongoose';
-// import authorization from './middlewares/auth';
-// import registerRouter from './routes/register';
 // import loginRouter from './routes/login';
-// import usersRouter from './routes/users';
 import postsRouter from './routes/posts';
-// import searchRouter from './routes/search';
-// import messagesRouter from './routes/messages';
-// import friendRequestsRouter from './routes/friendRequests';
+import essayRouter from './routes/essays';
 import cors from 'cors';
 import morgan from 'morgan';
 
@@ -17,15 +12,10 @@ const server = express();
 server.use(cors());
 server.use(morgan('tiny'));
 server.use(express.json());
-// server.use(express.static('photos'));
-// server.use('/register', registerRouter);
+server.use(express.static('public'));
 // server.use('/login', loginRouter);
-// server.use('/users', authorization, usersRouter);
-// server.use('/posts', authorization, postsRouter);
 server.use('/posts', postsRouter);
-// server.use('/search', authorization, searchRouter);
-// server.use('/messages', authorization, messagesRouter);
-// server.use('/friend-requests', authorization, friendRequestsRouter);
+server.use('/essays', essayRouter);
 
 server.use((req, res) => {
   res.status(404).json({ error: 'Not found' }).end();
