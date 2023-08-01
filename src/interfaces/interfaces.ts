@@ -6,3 +6,15 @@ export interface Post {
   url: string;
   createdAt: Date;
 }
+
+export interface InstagramFeed {
+  count: number;
+  edges: InstagramPost[];
+}
+
+export interface InstagramPost {
+  node: {
+    id: string;
+    shortcode: string;
+  };
+}

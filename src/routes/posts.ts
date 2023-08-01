@@ -1,49 +1,60 @@
-import { Router } from "express";
-import * as Interfaces from "../interfaces/interfaces";
-import Post from "../models/post";
-import mongoose from "mongoose";
+import { Router } from 'express';
+import fetch from 'node-fetch';
 
 const router = Router();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const allPosts = await Post.find().sort({ createdAt: -1 });
-    res.status(200).json({ allPosts });
-  } catch {
-    next(res.status(500).json({ error: "Internal server error" }));
-  }
-});
+const baseUrl =
+  'https://www.instagram.com/graphql/query/?query_hash=42323d64886122307be10013ad2dcc44&variables=';
+const id = 3607982422;
+const postsPerPage = 6;
 
-router.post("/", async (req, res, next) => {
-  const newPost = req.body as Interfaces.Post;
+router.get('/', async (req, res, next) => {
+  const variables = JSON.stringify({
+    id: id,
+    first: postsPerPage,
+  });
 
-  try {
-    const post = await Post.create(newPost);
-    res.status(201).json({ post });
-  } catch {
-    next(res.status(500).json({ error: "Internal server error" }));
-  }
-});
+  // const url =
+  //   'https://www.instagram.com/graphql/query/?query_hash=42323d64886122307be10013ad2dcc44&variables={"id":3607982422,"first":6}';
 
-router.put("/:id", async (req, res) => {
-  const update = req.body as Post;
+  const options = {
+    method: 'GET',
+  };
 
   try {
-    const updatedPost = await Post.findByIdAndUpdate(req.params.id, update, {
-      new: true,
-    });
-    res.status(200).json({ updatedPost });
+    fetch(baseUrl + variables, options)
+      .then((response) => response.json())
+      .then((data) => {
+        res.status(200).json(data);
+      });
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    next(res.status(500).json({ error: 'Internal server error' }));
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.get('/:endCursor', async (req, res, next) => {
+  const endCursor = req.params.endCursor;
+
+  const variables = JSON.stringify({
+    id: id,
+    first: postsPerPage,
+    after: endCursor,
+  });
+
+  const options = {
+    method: 'GET',
+  };
+
+  console.log('ez: ' + req.query);
+
   try {
-    const postToDelete = await Post.findByIdAndDelete(req.params.id);
-    res.status(200).json({ postToDelete });
+    fetch(baseUrl + variables, options)
+      .then((response) => response.json())
+      .then((data) => {
+        res.status(200).json(data);
+      });
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    next(res.status(500).json({ error: 'Internal server error' }));
   }
 });
 
