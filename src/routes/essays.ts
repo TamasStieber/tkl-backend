@@ -46,9 +46,13 @@ router.post('/', upload.single('essay'), async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
   try {
-    const essays = await Essay.find().sort({ createdAt: -1 });
+    const essay = await Essay.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { openCount: 1 } },
+      { new: true }
+    );
 
-    res.status(200).json(essays);
+    res.status(200).json(essay);
   } catch (error) {
     next(res.status(500).json({ error: 'Internal server error' }));
   }
