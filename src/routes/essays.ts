@@ -13,9 +13,9 @@ const storage = multer.diskStorage({
     cb(null, essaysDir);
   },
   filename: function (req, file, cb) {
-    const [fileName, extension] = file.originalname.split('.')
-    const uniqueFileName = fileName + '-' + Date.now() + '.' + extension
-    cb(null, uniqueFileName);
+    const [fileName, extension] = file.originalname.split('.');
+    const uniqueFileName = fileName + '-' + Date.now() + '.' + extension;
+    cb(null, file.originalname);
   },
 });
 
@@ -23,46 +23,48 @@ const upload = multer({ storage: storage });
 
 router.get('/', async (req, res, next) => {
   try {
-    const essays = await Essay.find().sort({createdAt: -1})
+    const essays = await Essay.find().sort({ createdAt: -1 });
 
-    res.status(200).json(essays)
+    res.status(200).json(essays);
   } catch (error) {
     next(res.status(500).json({ error: 'Internal server error' }));
   }
 });
 
 router.post('/', upload.single('essay'), async (req, res, next) => {
-    const newEssay = JSON.parse(req.body.data) as Interfaces.Essay;
+  const newEssay = JSON.parse(req.body.data) as Interfaces.Essay;
 
-    const fileName = req.file?.filename;
-    newEssay.url = fileName ? 'essays/' + fileName : '';
-    try {
-      const essay = await Essay.create(newEssay)
-  
-      res.status(200).json(essay)
-    } catch (error) {
-      next(res.status(500).json({ error: 'Internal server error' }));
-    }
-  });
+  const fileName = req.file?.filename;
+  newEssay.url = fileName ? fileName : '';
+  try {
+    const essay = await Essay.create(newEssay);
+    res.status(200).json(essay);
+  } catch (error) {
+    next(res.status(500).json({ error: 'Internal server error' }));
+  }
+});
 
 router.put('/:id', async (req, res, next) => {
-    try {
-      const essays = await Essay.find().sort({createdAt: -1})
-  
-      res.status(200).json(essays)
-    } catch (error) {
-      next(res.status(500).json({ error: 'Internal server error' }));
-    }
-  });
+  try {
+    const essays = await Essay.find().sort({ createdAt: -1 });
 
-  router.delete('/:id', async (req, res, next) => {
-    try {
-      const essayToDelete = await Essay.findByIdAndDelete(req.params.id)
-  
-      res.status(200).json(essayToDelete)
-    } catch (error) {
-      next(res.status(500).json({ error: 'Internal server error' }));
-    }
-  });
+    res.status(200).json(essays);
+  } catch (error) {
+    next(res.status(500).json({ error: 'Internal server error' }));
+  }
+});
 
-export default router
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const essayToDelete = await Essay.findByIdAndDelete(req.params.id);
+
+    const fileToDelete = essaysDir + '/' + essayToDelete?.url;
+    fs.existsSync(fileToDelete) && fs.unlinkSync(fileToDelete);
+
+    res.status(200).json(essayToDelete);
+  } catch (error) {
+    next(res.status(500).json({ error: 'Internal server error' }));
+  }
+});
+
+export default router;
