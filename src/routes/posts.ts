@@ -57,6 +57,9 @@ router.get('/', async (req, res, next) => {
 
     const response = await fetch(baseUrl + variables, options);
     const data = await response.json();
+
+    if(data.status && data.status !== 'ok') return res.status(503).json({error: 'Service unavailable, please try again later.'})
+
     const feedData = data.data.user
       .edge_owner_to_timeline_media as InstagramFeed;
 
@@ -148,6 +151,8 @@ const fetchPost = async (shortcode: string) => {
   try {
     const response = await fetch(postBaseUrl + variables, options);
     const data = await response.json();
+    
+    if(data.status && data.status !== 'ok') return {error: 'Service unavailable, please try again later.'}
 
     const postData = data.data as InstagramPostExtended;
 
