@@ -3,7 +3,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 // import loginRouter from './routes/login';
 import postsRouter from './routes/posts';
-import essayRouter from './routes/essays';
+import essaysRouter from './routes/essays';
+import booksRouter from './routes/books';
+import bookListsRouter from './routes/bookLists';
 import cors from 'cors';
 import morgan from 'morgan';
 
@@ -15,7 +17,9 @@ server.use(express.json());
 server.use(express.static('public'));
 // server.use('/login', loginRouter);
 server.use('/posts', postsRouter);
-server.use('/essays', essayRouter);
+server.use('/essays', essaysRouter);
+server.use('/books', booksRouter);
+server.use('/book-lists', bookListsRouter);
 
 server.use((req, res) => {
   res.status(404).json({ error: 'Not found' }).end();

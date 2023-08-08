@@ -72,3 +72,22 @@ export interface InstagramPost {
     shortcode: string;
   };
 }
+
+export interface IBook {
+  _id: mongoose.Types.ObjectId,
+  title: string;
+  author: string;
+  description?: string
+  href: string;
+  photoUrl: string;
+}
+
+export interface IBookList {
+  _id: mongoose.Types.ObjectId;
+  title: string;
+  url: string;
+  description: string;
+  photoUrl: string;
+  isHidden: boolean;
+  books: mongoose.Types.ObjectId[];
+}

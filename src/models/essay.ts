@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { Essay } from "../interfaces/interfaces";
 
-const postSchema: mongoose.Schema<Essay> = new mongoose.Schema(
+const essaySchema: mongoose.Schema<Essay> = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -24,6 +24,6 @@ const postSchema: mongoose.Schema<Essay> = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Essay = mongoose.model<Essay & mongoose.Document>("Essay", postSchema);
+const Essay = mongoose.model<Essay & mongoose.Document>("Essay", essaySchema);
 
 export default Essay;
