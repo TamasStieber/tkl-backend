@@ -33,20 +33,32 @@ router.get('/', async (req, res, next) => {
     method: 'GET',
   };
 
-  let feed: (
-    | {
-        error: string;
-      }
-    | {
-        postId: string;
+  interface Feed {
+    postId: string;
         text: string;
         createdAt: string;
         photos: {
           photoId: string;
           url: string;
         }[];
-      }
-  )[];
+  }
+
+
+
+  // let feed: (
+  //   | {
+  //       error: string;
+  //     }
+  //   | {
+  //       postId: string;
+  //       text: string;
+  //       createdAt: string;
+  //       photos: {
+  //         photoId: string;
+  //         url: string;
+  //       }[];
+  //     }
+  // )[];
 
   try {
     // fetch(baseUrl + variables, options)
@@ -66,7 +78,9 @@ router.get('/', async (req, res, next) => {
     const postPromises = feedData.edges.map((post) =>
       fetchPost(post.node.shortcode)
     );
-    feed = await Promise.all(postPromises);
+    const feed = await Promise.all(postPromises);
+
+    if (feed.includes(null)) return res.status(503).json({error: 'Service unavailable, please try again later.'}) 
     // feedData.edges.forEach((post) => {
     //   feed.push(fetchPost(post.node.shortcode));
     // });
@@ -152,7 +166,7 @@ const fetchPost = async (shortcode: string) => {
     const response = await fetch(postBaseUrl + variables, options);
     const data = await response.json();
     
-    if(data.status && data.status !== 'ok') return {error: 'Service unavailable, please try again later.'}
+    if(data.status && data.status !== 'ok') return null
 
     const postData = data.data as InstagramPostExtended;
 
