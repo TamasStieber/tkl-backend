@@ -40,14 +40,12 @@ router.put("/:id", async (req, res, next) => {
 });
 
 router.delete("/:id", async (req, res, next) => {
-  //   try {
-  //     const essayToDelete = await Essay.findByIdAndDelete(req.params.id);
-  //     const fileToDelete = essaysDir + '/' + essayToDelete?.url;
-  //     fs.existsSync(fileToDelete) && fs.unlinkSync(fileToDelete);
-  //     res.status(200).json(essayToDelete);
-  //   } catch (error) {
-  //     next(res.status(500).json({ error: 'Internal server error' }));
-  //   }
+  try {
+    const bookToDelete = await Book.findByIdAndDelete(req.params.id);
+    res.status(200).json(bookToDelete);
+  } catch (error) {
+    next(res.status(500).json({ error: "Internal server error" }));
+  }
 });
 
 export default router;
