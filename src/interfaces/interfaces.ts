@@ -74,10 +74,10 @@ export interface InstagramPost {
 }
 
 export interface IBook {
-  _id: mongoose.Types.ObjectId,
+  _id: mongoose.Types.ObjectId;
   title: string;
   author: string;
-  description?: string
+  description?: string;
   href: string;
   photoUrl: string;
 }
@@ -87,7 +87,7 @@ export interface IBookList {
   title: string;
   url: string;
   description: string;
-  photoUrl: string;
+  photoUrl: string | undefined;
   isHidden: boolean;
   books: mongoose.Types.ObjectId[];
 }
