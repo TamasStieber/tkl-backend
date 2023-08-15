@@ -1,5 +1,5 @@
-import { Request } from 'express';
-import mongoose, { Document } from 'mongoose';
+import { Request } from "express";
+import mongoose, { Document } from "mongoose";
 
 export interface Post {
   _id: mongoose.Types.ObjectId;
@@ -74,10 +74,10 @@ export interface InstagramPost {
 }
 
 export interface IBook {
-  _id: mongoose.Types.ObjectId,
+  _id: mongoose.Types.ObjectId;
   title: string;
   author: string;
-  description?: string
+  description?: string;
   href: string;
   photoUrl: string;
 }
@@ -90,4 +90,20 @@ export interface IBookList {
   photoUrl: string;
   isHidden: boolean;
   books: mongoose.Types.ObjectId[];
+}
+
+export interface IUser {
+  _id: mongoose.Types.ObjectId;
+  email: string;
+  password: string;
+}
+
+export interface IRegisterData {
+  email: string;
+  password: string;
+}
+
+export interface ILoginData {
+  email: string;
+  password: string;
 }
