@@ -1,5 +1,5 @@
-import { Request } from 'express';
-import mongoose, { Document } from 'mongoose';
+import { Request } from "express";
+import mongoose, { Document } from "mongoose";
 
 export interface Post {
   _id: mongoose.Types.ObjectId;
@@ -90,4 +90,20 @@ export interface IBookList {
   photoUrl: string | undefined;
   isHidden: boolean;
   books: mongoose.Types.ObjectId[];
+}
+
+export interface IUser {
+  _id: mongoose.Types.ObjectId;
+  email: string;
+  password: string;
+}
+
+export interface IRegisterData {
+  email: string;
+  password: string;
+}
+
+export interface ILoginData {
+  email: string;
+  password: string;
 }
