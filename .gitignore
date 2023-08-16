@@ -17,6 +17,7 @@
 /dist
 
 /public/essays/*
+/public/images/*
 
 # misc
 .DS_Store

@@ -1,39 +1,42 @@
-import mongoose from "mongoose";
-import { IBookList } from "../interfaces/interfaces";
+import mongoose from 'mongoose';
+import { IBookList } from '../interfaces/interfaces';
 
 const bookListSchema: mongoose.Schema<IBookList> = new mongoose.Schema(
-    {
+  {
     title: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     url: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     description: {
-        type: String,
-        required: false
+      type: String,
+      required: false,
     },
     photoUrl: {
-        type: String,
-        required: true,
-        default: ''
+      type: String,
+      required: false,
+      default: undefined,
     },
     isHidden: {
-        type: Boolean,
-        required: true,
-        default: true
+      type: Boolean,
+      required: true,
     },
     books: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Book',
-        },
-      ],
-}, { timestamps: true }
-)
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Book',
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
-const Booklist = mongoose.model<IBookList & mongoose.Document>("Booklist", bookListSchema);
+const Booklist = mongoose.model<IBookList & mongoose.Document>(
+  'Booklist',
+  bookListSchema
+);
 
 export default Booklist;

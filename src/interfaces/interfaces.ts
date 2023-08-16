@@ -87,7 +87,7 @@ export interface IBookList {
   title: string;
   url: string;
   description: string;
-  photoUrl: string;
+  photoUrl: string | undefined;
   isHidden: boolean;
   books: mongoose.Types.ObjectId[];
 }
